@@ -1,5 +1,37 @@
 # Everything about Ensemble Learning (Exploited)
 
+## Objective
+
+- **Problem** → "just try XGBoost" is how most people pick an ensemble; when it wins or loses, nobody knows why
+- **Why this repo** → grow one decision tree into every kind of ensemble (bagging, Random Forest, boosting, voting, stacking), measure what each one fixes (variance or bias), and score them all on the same folds
+- **Real-world use** → a decision guide for small tabular problems such as churn, credit scoring or lead scoring: which ensemble to try first, which knob matters, and how to compare models fairly
+
+## Highlights
+
+**Question:** does any ensemble beat one simple rule?
+
+**Answer:** yes, by about 5 points. "Women survive" scores 78.7 %; Gradient Boosting, Stacking, Bagging and XGBoost all land at 83.3-83.5 %, a statistical tie, so the cheapest one to maintain is a fine choice.
+
+![leaderboard](assets/05_leaderboard.png)
+
+**Question:** why does a crowd of trees not reach 98 %?
+
+**Answer:** the trees make the same mistakes. 51 independent voters at 65 % would be right 98.6 % of the time; 25 real trees reach only 83.2 % because their errors correlate (0.64-0.81 between model types).
+
+![condorcet](assets/02_condorcet.png)
+
+**Question:** what decided survival?
+
+**Answer:** title (Mr / Mrs / Miss / Master) first, then sex and class.
+
+| Feature (permutation importance) | Accuracy lost when shuffled |
+|---|---|
+| Title | 13.6 points |
+| Sex | 4.7 |
+| Class | 3.8 |
+| Age | 3.6 |
+| Fare | 3.3 |
+
 ## [1/9] Overview
 
 - **Data** → [Titanic: Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic) · 891 passengers with outcome · 418 to predict
