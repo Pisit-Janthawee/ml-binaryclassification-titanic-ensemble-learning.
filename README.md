@@ -75,9 +75,12 @@
 
 ## [4/9] One decision tree
 
+- **A split in one line** → try every yes/no question, keep the one that leaves the purest groups (Gini / entropy)
 - **Best first split** → "is the passenger a Mr?" (Gini gain 0.143), slightly ahead of sex (0.140): it also moves the boys to the women's side
 - **Depth** → best at 4 (81.6%); an unlimited tree scores 98.9% on training passengers and 78.9% on new ones
 - **Instability** → 25 bootstrap trees score 74.9-84.4% on the same passengers and disagree on 69% of them; their vote scores 83.2%
+
+![one Gini split](assets/m_gini_split.png)
 
 ## [5/9] Ensemble categorization
 
@@ -94,10 +97,12 @@
 
 ## [6/9] Bagging and Random Forest
 
-- **Bootstrap** → $(1 - 1/n)^n \approx 36.8\%$ of passengers left out per tree → out-of-bag accuracy 82.6% vs CV 82.1%
+- **Bootstrap** → draw 891 passengers out of 891, putting each back → $(1 - 1/n)^n \approx 36.8\%$ left out per tree → out-of-bag accuracy 82.6% vs CV 82.1%
 - **Variance** → $\rho\sigma^2 + \frac{1-\rho}{B}\sigma^2$ → tree correlation ρ sets the floor
 - **Finding** → on Titanic √p columns per split does not decorrelate the trees (ρ 0.43 vs 0.44 for bagging); 1 column per split is best (84.1%, ρ 0.36)
   - the signal sits in title, sex and class → hiding them weakens each tree, while substitutes keep the trees alike
+
+![bootstrap](assets/m_bootstrap.png)
 
 ![random forest knob](assets/03_random_forest_knob.png)
 
@@ -108,13 +113,15 @@
 - **Gradient boosting** → learning rate 0.05 peaks at 85.1% (tree 204); 1.0 peaks at tree 2 and falls to 77.2%
 - **Stumps** → AdaBoost's train and validation stay within 1 point
 
+![adaboost weights](assets/m_adaboost_weights.png)
+
 ![boosting learning rate](assets/04_boosting_learning_rate.png)
 
 ## [8/9] Voting, stacking and the winner
 
 - **Diversity** → base-model mistakes correlate 0.64-0.81; 97 passengers fool all 4 models (91 are men who survived or women who died)
 - **Voting** → 83.0-83.1%, below its best member: equal votes let weaker models outvote it
-- **Stacking** → meta-model weights Gradient Boosting highest (2.49 vs 0.54 for logistic regression) → 83.4% with the smallest fold spread
+- **Stacking** → a logistic regression trained on out-of-fold predictions weights Gradient Boosting highest (2.49 vs 0.54 for logistic regression) → 83.4% with the smallest fold spread
 - **Importance** → title 13.6 points, sex 4.7, class 3.8, age 3.6, fare 3.3
 
 ![leaderboard](assets/05_leaderboard.png)
