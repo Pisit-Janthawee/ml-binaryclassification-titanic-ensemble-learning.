@@ -77,6 +77,7 @@
 
 - **A split in one line** → try every yes/no question, keep the one that leaves the purest groups (Gini / entropy)
 - **Best first split** → "is the passenger a Mr?" (Gini gain 0.143), slightly ahead of sex (0.140): it also moves the boys to the women's side
+- **Gain, part by part** → mix before (0.473) − size-weighted mix after (0.330) → greedy, one column at a time, and only tiny groups are pure → why a deep tree memorises
 - **Depth** → best at 4 (81.6%); an unlimited tree scores 98.9% on training passengers and 78.9% on new ones
 - **Instability** → 25 bootstrap trees score 74.9-84.4% on the same passengers and disagree on 69% of them; their vote scores 83.2%
 
@@ -98,7 +99,7 @@
 ## [6/9] Bagging and Random Forest
 
 - **Bootstrap** → draw 891 passengers out of 891, putting each back → $(1 - 1/n)^n \approx 36.8\%$ left out per tree → out-of-bag accuracy 82.6% vs CV 82.1%
-- **Variance** → $\rho\sigma^2 + \frac{1-\rho}{B}\sigma^2$ → tree correlation ρ sets the floor
+- **Variance** → $\rho\sigma^2 + \frac{1-\rho}{B}\sigma^2$ → more trees only shrink the unshared part $\frac{1-\rho}{B}\sigma^2$; the shared part $\rho\sigma^2$ (tree correlation) sets the floor, which Random Forest tries to lower by hiding columns
 - **Finding** → on Titanic √p columns per split does not decorrelate the trees (ρ 0.43 vs 0.44 for bagging); 1 column per split is best (84.1%, ρ 0.36)
   - the signal sits in title, sex and class → hiding them weakens each tree, while substitutes keep the trees alike
 
@@ -109,18 +110,21 @@
 ## [7/9] Boosting
 
 - **AdaBoost** → round 1 "Mr?" (α 0.64), round 2 "deck known?" (α 0.42), round 3 "family ≥ 5?" (α 0.16)
+  - $\alpha = \frac12 \ln\frac{1-\varepsilon}{\varepsilon}$ → 0 for a coin-flip stump; missed passengers × $e^{\alpha}$ (about 1.9 in round 1), so after rescaling they hold exactly half the weight
   - after 3 rounds, women who died (9% of passengers) carry 18% of the weight, men who survived 12% → 25%
-- **Gradient boosting** → learning rate 0.05 peaks at 85.1% (tree 204); 1.0 peaks at tree 2 and falls to 77.2%
+- **Gradient boosting** → $F_m = F_{m-1} + \nu h_m$, each small tree fitted to the residuals $y - \hat p$ → learning rate 0.05 peaks at 85.1% (tree 204); 1.0 peaks at tree 2 and falls to 77.2%
 - **Stumps** → AdaBoost's train and validation stay within 1 point
 
 ![adaboost weights](assets/m_adaboost_weights.png)
+
+![adaboost say and reweight](assets/m_adaboost_alpha.png)
 
 ![boosting learning rate](assets/04_boosting_learning_rate.png)
 
 ## [8/9] Voting, stacking and the winner
 
 - **Diversity** → base-model mistakes correlate 0.64-0.81; 97 passengers fool all 4 models (91 are men who survived or women who died)
-- **Voting** → 83.0-83.1%, below its best member: equal votes let weaker models outvote it
+- **Voting** → 83.0-83.1%, below its best member: the fixed 1/K weights let weaker models outvote it
 - **Stacking** → a logistic regression trained on out-of-fold predictions weights Gradient Boosting highest (2.49 vs 0.54 for logistic regression) → 83.4% with the smallest fold spread
 - **Importance** → title 13.6 points, sex 4.7, class 3.8, age 3.6, fare 3.3
 
