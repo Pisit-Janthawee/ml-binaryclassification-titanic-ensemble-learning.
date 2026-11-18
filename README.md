@@ -12,13 +12,13 @@
 
 **Answer:** yes, by about 5 points. "Women survive" scores 78.7 %; Gradient Boosting, Stacking, Bagging and XGBoost all land at 83.3-83.5 %, a statistical tie, so the cheapest one to maintain is a fine choice.
 
-![leaderboard](assets/05_leaderboard.png)
+![leaderboard](assets/png/05_leaderboard.png)
 
 **Question:** why does a crowd of trees not reach 98 %?
 
 **Answer:** the trees make the same mistakes. 51 independent voters at 65 % would be right 98.6 % of the time; 25 real trees reach only 83.2 % because their errors correlate (0.64-0.81 between model types).
 
-![condorcet](assets/02_condorcet.png)
+![condorcet](assets/png/02_condorcet.png)
 
 **Question:** what decided survival?
 
@@ -81,20 +81,20 @@
 - **Depth** → best at 4 (81.6%); an unlimited tree scores 98.9% on training passengers and 78.9% on new ones
 - **Instability** → 25 bootstrap trees score 74.9-84.4% on the same passengers and disagree on 69% of them; their vote scores 83.2%
 
-![one Gini split](assets/m_gini_split.png)
+![one Gini split](assets/png/m_gini_split.png)
 
 ## [5/9] Ensemble categorization
 
-![ensemble learning categorization](assets/01_ensemble_categorization.png)
+![ensemble learning categorization](assets/png/01_ensemble_categorization.png)
 
 - **Parallel + same algorithm** → bagging, Random Forest → lower variance
 - **Sequential + same algorithm** → boosting → lower bias
 - **Parallel + different algorithms** → voting
 - **Different algorithms, then a meta-model** → stacking
-- **Source** → `assets/ensemble_categorization.drawio` (editable in draw.io)
+- **Source** → `assets/drawio/ensemble_categorization.drawio` (editable in draw.io)
 - **Why a crowd works** → Condorcet's jury theorem: 51 independent voters at 65% would be right 98.6% of the time; 25 real trees reach 83.2% because they make the same mistakes
 
-![condorcet](assets/02_condorcet.png)
+![condorcet](assets/png/02_condorcet.png)
 
 ## [6/9] Bagging and Random Forest
 
@@ -103,9 +103,9 @@
 - **Finding** → on Titanic √p columns per split does not decorrelate the trees (ρ 0.43 vs 0.44 for bagging); 1 column per split is best (84.1%, ρ 0.36)
   - the signal sits in title, sex and class → hiding them weakens each tree, while substitutes keep the trees alike
 
-![bootstrap](assets/m_bootstrap.png)
+![bootstrap](assets/png/m_bootstrap.png)
 
-![random forest knob](assets/03_random_forest_knob.png)
+![random forest knob](assets/png/03_random_forest_knob.png)
 
 ## [7/9] Boosting
 
@@ -115,11 +115,11 @@
 - **Gradient boosting** → $F_m = F_{m-1} + \nu h_m$, each small tree fitted to the residuals $y - \hat p$ → learning rate 0.05 peaks at 85.1% (tree 204); 1.0 peaks at tree 2 and falls to 77.2%
 - **Stumps** → AdaBoost's train and validation stay within 1 point
 
-![adaboost weights](assets/m_adaboost_weights.png)
+![adaboost weights](assets/png/m_adaboost_weights.png)
 
-![adaboost say and reweight](assets/m_adaboost_alpha.png)
+![adaboost say and reweight](assets/png/m_adaboost_alpha.png)
 
-![boosting learning rate](assets/04_boosting_learning_rate.png)
+![boosting learning rate](assets/png/04_boosting_learning_rate.png)
 
 ## [8/9] Voting, stacking and the winner
 
@@ -128,9 +128,9 @@
 - **Stacking** → a logistic regression trained on out-of-fold predictions weights Gradient Boosting highest (2.49 vs 0.54 for logistic regression) → 83.4% with the smallest fold spread
 - **Importance** → title 13.6 points, sex 4.7, class 3.8, age 3.6, fare 3.3
 
-![leaderboard](assets/05_leaderboard.png)
+![leaderboard](assets/png/05_leaderboard.png)
 
-![permutation importance](assets/06_permutation_importance.png)
+![permutation importance](assets/png/06_permutation_importance.png)
 
 ## [9/9] Next steps
 
